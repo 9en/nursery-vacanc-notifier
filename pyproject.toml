@@ -1,0 +1,66 @@
+# Ruff Configuration
+# Documentation: https://docs.astral.sh/ruff/configuration/
+# Settings: https://docs.astral.sh/ruff/settings
+# Based on settings from Transformers and Pandas
+
+[tool.ruff]
+# The line length to use when enforcing long-lines violations (like E501) and at which isort and the formatter prefers to wrap lines.
+line-length = 119 # Transformers style
+# The number of spaces per indentation level (tab).
+indent-width = 2
+
+select = ["ALL"]
+ignore = [
+    "A002",    # Checks for any function arguments that use the same name as a builtin.
+    "B008",    # Checks for function calls in default function arguments.
+    "D100",    # Checks for undocumented public module definitions.
+    "D103",    # Checks for undocumented public function definitions.
+    "D107",    # Checks for public __init__ method definitions that are missing docstrings.
+    "D415",    # Checks for docstrings in which the first line does not end in a punctuation mark, such as a period, question mark, or exclamation point.
+    "G004",    # Checks for uses of f-strings to format logging messages.
+    "S602",    # Check for method calls that initiate a subprocess with a shell.
+    "S603",    # Check for method calls that initiate a subprocess without a shell.
+    "ANN101",  # Checks that instance method self arguments have type annotations.
+    "ANN102",  # Checks that class method cls arguments have type annotations.
+    "ANN401",  # Checks that function arguments are annotated with a more specific type than Any.
+    "BLE001",  # Checks for except clauses that catch all exceptions.
+    "COM812",  # Checks for the absence of trailing commas.
+    "DTZ007",  # Checks for uses of datetime.datetime.strptime() that lead to naive datetime objects.
+    "ERA001",  # Checks for commented-out Python code.
+    "FA100",   # Checks for missing from __future__ import annotations imports upon detecting type annotations that can be written more succinctly under PEP 563.
+    "FBT001",  # Checks for the use of boolean positional arguments in function definitions, as determined by the presence of a bool type hint.
+    "FBT002",  # Checks for the use of boolean positional arguments in function definitions, as determined by the presence of a boolean default value.
+    "PD002",   # Checks for inplace=True usages in pandas function and method calls.
+    "PD901",   # Checks for assignments to the variable df.
+    "PERF203", # Checks for uses of except handling via try-except within for and while loops.
+    "PERF401", # Checks for for loops that can be replaced by a list comprehension.
+    "PTH118",  # Checks for uses of os.path.join.
+    "PTH123",  # Checks for uses of the open builtin.
+    "RUF001",  # Checks for ambiguous Unicode characters in strings.
+    "RUF002",  # Checks for ambiguous Unicode characters in docstrings.
+    "RUF003",  # Checks for ambiguous Unicode characters in comments.
+    "SIM108",  # Check for if-else-blocks that can be replaced with a ternary operator.
+]
+
+exclude = [".vscode*/*"]
+
+[tool.ruff.isort]
+# The number of blank lines to place after imports.
+lines-after-imports = 2
+
+[tool.ruff.format]
+# Configures the preferred quote character for strings.
+quote-style = "double"
+# Whether to use spaces or tabs for indentation.
+indent-style = "space"
+# Ruff uses existing trailing commas as an indication that short lines should be left separate.
+skip-magic-trailing-comma = false
+# The character Ruff uses at the end of a line.
+line-ending = "auto"
+
+[tool.ruff.lint.pydocstyle]
+# Whether to use Google-style or NumPy-style conventions or the PEP 257 defaults when analyzing docstring sections.
+convention = "google"
+
+[tool.ruff.lint.pylint]
+max-args = 10

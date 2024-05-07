@@ -1,0 +1,19 @@
+[default]
+request_url."習志野市" = "https://www.city.narashino.lg.jp/soshiki/kodomo_hoiku/gyomu/hoikugakko/akireigetu.html"
+line_notify_api = "https://notify-api.line.me/api/notify"
+gcp_project_id = "analysis-9en"
+secret_manager_name = "LINE_NOTIFY"
+line_notify_max_message_length = 1000
+target_age = ["0歳児", "1歳児", "2歳児"]
+target_availability = ["1～2人", "3人以上"]
+
+availability."◯" = "3人以上"
+availability."△" = "1～2人"
+availability."×" = "空きなし"
+availability."―" = "受け入れなし"
+
+[development]
+line_notify_token_id = "line_notify_dev"
+
+[production]
+line_notify_token_id = "保育所等空き状況"

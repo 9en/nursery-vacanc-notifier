@@ -1,0 +1,16 @@
+{
+  "files.exclude": {
+    "**/.ipynb_checkpoints": true,
+    "**/__pycache__": true,
+  },
+  "ruff.lint.args": [
+    "--config=${workspaceFolder}/pyproject.toml"
+  ],
+  "ruff.format.args": [
+    "--config=${workspaceFolder}/pyproject.toml"
+  ],
+  "notebook.markup.fontSize": 12,
+  "editor.tabSize": 2,
+  "notebook.lineNumbers": "on",
+  "editor.fontSize": 14,
+}

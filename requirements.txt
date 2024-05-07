@@ -1,0 +1,7 @@
+pandas==2.2.2
+requests==2.31.0
+lxml==5.2.1
+dynaconf==3.2.5
+ipykernel==6.29.4
+ruff==0.4.2
+google-cloud-secret-manager==2.20.0
