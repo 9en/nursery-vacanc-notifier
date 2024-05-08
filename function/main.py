@@ -1,3 +1,4 @@
+import functions_framework
 import pandas as pd
 from loguru import logger
 
@@ -25,8 +26,9 @@ def line_post(df: pd.DataFrame) -> None:
     df (pd.DataFrame): DataFrame
   """
   for city in get_config_value("request_url"):
-    # 送信対象の市区町村のみ送信
+    logger.info(f"Post to LINE for city: {city} information")
     line_city_post(city)
+
     for age in get_config_value("target_age"):
       for availability in get_config_value("target_availability"):
         logger.info(f"Post to LINE for city: {city} age: {age}, availability: {availability}")
@@ -51,8 +53,8 @@ def line_post(df: pd.DataFrame) -> None:
           line_notify(notify_message)
           # print(notify_message
 
-
-def main() -> None:
+@functions_framework.http
+def main(request) -> None:
   """Cloud Functionのエントリーポイント
 
   Args:
@@ -67,7 +69,5 @@ def main() -> None:
       line_post(df)
     else:
       logger.info("No update")
+  return {"status": "200"}
 
-
-if __name__ == "__main__":
-  main()

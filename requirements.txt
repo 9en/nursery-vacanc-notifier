@@ -5,3 +5,6 @@ dynaconf==3.2.5
 ipykernel==6.29.4
 ruff==0.4.2
 google-cloud-secret-manager==2.20.0
+loguru==0.7.2
+beautifulsoup4==4.12.3
+functions-framework==3.5.0
