@@ -3,8 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from dateutil import parser, tz
 from loguru import logger
-
-from function.dynaconf import get_config_value
+from utils.dynaconf import get_config_value
 
 
 @logger.catch
@@ -26,12 +25,12 @@ def read_html_tables(html_source: bytes) -> pd.DataFrame:
   df.drop(["名称1", "定員"], axis=1, inplace=True)
 
   # 空き状況の記号を文字列に変換
-  df = df.replace(get_config_value("availability"))
+  df = df.replace(get_config_value("AVAILABILITY"))
 
   # フォーマット変更
   df = df.melt(id_vars=["名称"], var_name="年齢", value_name="空き")
-  df = df[df["空き"].isin(get_config_value("target_availability"))]
-  return df[df["年齢"].isin(get_config_value("target_age"))]
+  df = df[df["空き"].isin(get_config_value("TARGET_AVAILABILITY"))]
+  return df[df["年齢"].isin(get_config_value("TARGET_AGE"))]
 
 
 @logger.catch
@@ -74,8 +73,8 @@ def scrape() -> (pd.DataFrame, str):
       str: update time in the format of %Y-%m-%d %H:%M:%S
   """
   logger.info("Scraping")
-  for city in get_config_value("request_url"):
-    html_source = requests.get(get_config_value("request_url")[city], timeout=10)
+  for city in get_config_value("REQUEST_URL"):
+    html_source = requests.get(get_config_value("REQUEST_URL")[city], timeout=10)
     update_time = extract_update_time(html_source.text)
     df = read_html_tables(html_source.content)
   return df, update_time
