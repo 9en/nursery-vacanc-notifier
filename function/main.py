@@ -4,10 +4,7 @@ from scraping import scrape
 from utils.date import get_current_date_in_jst
 from utils.dynaconf import get_config_value
 from utils.line_notify import line_notify
-from utils.logger import init_logger
-
-
-logger = init_logger()
+from utils.logger import logger
 
 
 def line_city_post(city: str) -> None:

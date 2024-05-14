@@ -1,10 +1,8 @@
 import requests
+
 from utils.dynaconf import get_config_value
 from utils.gcp import gcp_secretmanager
-from utils.logger import init_logger
-
-
-logger = init_logger()
+from utils.logger import logger
 
 
 def line_notify(message: str) -> None:

@@ -3,10 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from dateutil import parser, tz
 from utils.dynaconf import get_config_value
-from utils.logger import init_logger
-
-
-logger = init_logger()
+from utils.logger import logger
 
 
 def read_html_tables(html_source: bytes) -> pd.DataFrame:

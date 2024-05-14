@@ -2,11 +2,9 @@ import json
 import os
 
 from google.cloud import secretmanager
+
 from utils.dynaconf import get_config_value
-from utils.logger import init_logger
-
-
-logger = init_logger()
+from utils.logger import logger
 
 
 def gcp_secretmanager() -> dict:

@@ -3,6 +3,7 @@ import os
 
 from google.cloud.logging import Client
 from google.cloud.logging_v2.handlers import CloudLoggingHandler
+
 from utils.dynaconf import get_config_value
 
 
@@ -34,3 +35,6 @@ def init_logger() -> logging.Logger:
     logger.addHandler(handler)
 
   return logger
+
+
+logger = init_logger()
