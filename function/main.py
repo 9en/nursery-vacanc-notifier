@@ -1,10 +1,10 @@
 import functions_framework
 import pandas as pd
+from scraping import scrape
 from utils.date import get_current_date_in_jst
 from utils.dynaconf import get_config_value
 from utils.line_notify import line_notify
 from utils.logger import init_logger
-from utils.scraping import scrape
 
 
 logger = init_logger()
