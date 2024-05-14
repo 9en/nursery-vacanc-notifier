@@ -1,10 +1,12 @@
 import requests
-from loguru import logger
 from utils.dynaconf import get_config_value
 from utils.gcp import gcp_secretmanager
+from utils.logger import init_logger
 
 
-@logger.catch
+logger = init_logger()
+
+
 def line_notify(message: str) -> None:
   secret = gcp_secretmanager()
   logger.info("Sending LINE notification")

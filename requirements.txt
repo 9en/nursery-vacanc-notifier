@@ -3,7 +3,6 @@ requests==2.31.0
 lxml==5.2.1
 dynaconf==3.2.5
 google-cloud-secret-manager==2.20.0
-loguru==0.7.2
 beautifulsoup4==4.12.3
 functions-framework==3.4.0
-google.cloud.logging>=3.2.0
+google.cloud.logging==3.2.0

@@ -1,10 +1,8 @@
 from datetime import datetime
 
 from dateutil.tz import gettz
-from loguru import logger
 
 
-@logger.catch
 def get_current_date_in_jst() -> str:
   """Get the current date in Japan Standard Time (JST)
 

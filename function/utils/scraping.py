@@ -2,11 +2,13 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from dateutil import parser, tz
-from loguru import logger
 from utils.dynaconf import get_config_value
+from utils.logger import init_logger
 
 
-@logger.catch
+logger = init_logger()
+
+
 def read_html_tables(html_source: bytes) -> pd.DataFrame:
   """HTMLを読み込んでDataFrameに変換する
 
@@ -33,7 +35,6 @@ def read_html_tables(html_source: bytes) -> pd.DataFrame:
   return df[df["年齢"].isin(get_config_value("TARGET_AGE"))]
 
 
-@logger.catch
 def parse_update_time(timestamp_str: str) -> str:
   """文字列を解析してフォーマットする
 
@@ -48,7 +49,6 @@ def parse_update_time(timestamp_str: str) -> str:
   return timestamp.strftime("%Y-%m-%d")
 
 
-@logger.catch
 def extract_update_time(html_source: bytes) -> str:
   """Update timeを抽出する
 
@@ -64,7 +64,6 @@ def extract_update_time(html_source: bytes) -> str:
   return parse_update_time(timestamp_str)
 
 
-@logger.catch
 def scrape() -> (pd.DataFrame, str):
   """Webサイトから情報を取得する
 

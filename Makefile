@@ -18,6 +18,7 @@ run:
 		--volume ~/.config/gcloud/:/root/.config/gcloud \
 		--env ENV_FOR_DYNACONF=$(ENV_FOR_DYNACONF_STG) \
 		--env ENV_LOGGER=$(ENV_LOGGER_LOCAL) \
+		--env ENV_GCP_PROJECT_ID=$(ENV_GCP_PROJECT_ID) \
 		$(PROJECT_NAME)
 
 .PHONY: exec
@@ -49,9 +50,9 @@ deploy_prd: deploy_requirements
 		--timeout=60 \
 		--source=function/ \
 		--entry-point=main \
-		--project=$(GCP_PROJECT_ID) \
-		--set-env-vars=ENV_FOR_DYNACONF=$(ENV_FOR_DYNACONF),ENV_LOGGER=$(ENV_LOGGER_CLOUD) \
-		--service-account=$(PROJECT_NAME)@$(GCP_PROJECT_ID).iam.gserviceaccount.com
+		--project=$(ENV_GCP_PROJECT_ID) \
+		--set-env-vars=ENV_FOR_DYNACONF=$(ENV_FOR_DYNACONF),ENV_LOGGER=$(ENV_LOGGER_CLOUD),ENV_GCP_PROJECT_ID=$(ENV_GCP_PROJECT_ID) \
+		--service-account=$(PROJECT_NAME)@$(ENV_GCP_PROJECT_ID).iam.gserviceaccount.com
 
 .PHONY: deploy_stg
 deploy_stg: deploy_requirements
@@ -64,14 +65,14 @@ deploy_stg: deploy_requirements
 		--timeout=60 \
 		--source=function/ \
 		--entry-point=main \
-		--project=$(GCP_PROJECT_ID_STG) \
-		--set-env-vars=ENV_FOR_DYNACONF=$(ENV_FOR_DYNACONF_STG),ENV_LOGGER=$(ENV_LOGGER_CLOUD) \
-		--service-account=$(PROJECT_NAME)@$(GCP_PROJECT_ID_STG).iam.gserviceaccount.com
+		--project=$(ENV_GCP_PROJECT_ID_STG) \
+		--set-env-vars=ENV_FOR_DYNACONF=$(ENV_FOR_DYNACONF_STG),ENV_LOGGER=$(ENV_LOGGER_CLOUD),ENV_GCP_PROJECT_ID=$(ENV_GCP_PROJECT_ID_STG) \
+		--service-account=$(PROJECT_NAME)@$(ENV_GCP_PROJECT_ID_STG).iam.gserviceaccount.com
 
 .PHONY: deploy_prd_env
 deploy_prd_env:
 	@gcloud functions describe $(PROJECT_NAME) \
-		--project=$(GCP_PROJECT_ID) \
+		--project=$(ENV_GCP_PROJECT_ID) \
 		--region=asia-northeast1 \
 		--format=json \
 		| jq '.serviceConfig.environmentVariables'
@@ -79,7 +80,7 @@ deploy_prd_env:
 .PHONY: deploy_stg_env
 deploy_stg_env:
 	@gcloud functions describe $(PROJECT_NAME) \
-		--project=$(GCP_PROJECT_ID_STG) \
+		--project=$(ENV_GCP_PROJECT_ID_STG) \
 		--region=asia-northeast1 \
 		--format=json \
 		| jq '.serviceConfig.environmentVariables'

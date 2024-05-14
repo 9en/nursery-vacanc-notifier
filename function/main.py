@@ -1,10 +1,13 @@
 import functions_framework
 import pandas as pd
-from loguru import logger
 from utils.date import get_current_date_in_jst
 from utils.dynaconf import get_config_value
 from utils.line_notify import line_notify
+from utils.logger import init_logger
 from utils.scraping import scrape
+
+
+logger = init_logger()
 
 
 def line_city_post(city: str) -> None:
@@ -74,4 +77,3 @@ def main(request) -> dict:
   except Exception as e:
     logger.exception(e)
     return {"status": "500", "error": str(e)}
-
