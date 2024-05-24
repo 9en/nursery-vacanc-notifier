@@ -15,26 +15,36 @@ LOCAL_LOGGING_FORMAT = "%(asctime)s | %(levelname)-8s | %(module)s:%(lineno)d | 
 
 
 def init_logger() -> logging.Logger:
-  """ログを初期化する関数
+  """ログを初期化して返すシングルトン関数
 
   Returns:
       logging.Logger: 初期化されたロガー
   """
   logger = logging.getLogger(get_config_value("PROJECT_NAME"))
-  logger.setLevel(logging.DEBUG)
-
-  if os.getenv("ENV_LOGGER") == "local":
-    handler = logging.StreamHandler()
-    handler.setFormatter(logging.Formatter(LOCAL_LOGGING_FORMAT))
-  elif os.getenv("ENV_LOGGER") == "gcloud":
-    client = Client()
-    handler = CloudLoggingHandler(client)
-    handler.setFormatter(logging.Formatter(CLOUD_LOGGING_FORMAT))
-
   if not logger.handlers:  # Avoid adding handlers multiple times in case of reinitialization
+    logger.setLevel(logging.DEBUG)
+
+    env_logger = os.getenv("ENV_LOGGER")
+    if env_logger == "local":
+      handler = logging.StreamHandler()
+      handler.setFormatter(logging.Formatter(LOCAL_LOGGING_FORMAT))
+    elif env_logger == "gcloud":
+      client = Client()
+      handler = CloudLoggingHandler(client)
+      handler.setFormatter(logging.Formatter(CLOUD_LOGGING_FORMAT))
+    else:
+      handler = logging.NullHandler()
+
+    handler.setLevel(logging.DEBUG)
     logger.addHandler(handler)
+    logger.propagate = False  # Avoid duplicate logs in the console
 
   return logger
 
 
-logger = init_logger()
+def log_decorator(func):
+  def wrapper(*args, **kwargs):
+    logger = init_logger()  # Each time the function is called, the logger is initialized
+    return func(logger, *args, **kwargs)
+
+  return wrapper

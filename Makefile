@@ -18,7 +18,7 @@ run:
 		--volume ~/.config/gcloud/:/root/.config/gcloud \
 		--env ENV_FOR_DYNACONF=$(ENV_FOR_DYNACONF_STG) \
 		--env ENV_LOGGER=$(ENV_LOGGER_LOCAL) \
-		--env ENV_GCP_PROJECT_ID=$(ENV_GCP_PROJECT_ID) \
+		--env ENV_GCP_PROJECT_ID=$(ENV_GCP_PROJECT_ID_STG) \
 		$(PROJECT_NAME)
 
 .PHONY: exec
@@ -46,10 +46,11 @@ deploy_prd: deploy_requirements
 		--trigger-http \
 		--region=asia-northeast1 \
 		--runtime=python311 \
-		--memory=256 \
+		--memory=512 \
 		--timeout=60 \
 		--source=function/ \
 		--entry-point=main \
+		--no-allow-unauthenticated \
 		--project=$(ENV_GCP_PROJECT_ID) \
 		--set-env-vars=ENV_FOR_DYNACONF=$(ENV_FOR_DYNACONF),ENV_LOGGER=$(ENV_LOGGER_CLOUD),ENV_GCP_PROJECT_ID=$(ENV_GCP_PROJECT_ID) \
 		--service-account=$(PROJECT_NAME)@$(ENV_GCP_PROJECT_ID).iam.gserviceaccount.com
@@ -61,10 +62,11 @@ deploy_stg: deploy_requirements
 		--trigger-http \
 		--region=asia-northeast1 \
 		--runtime=python311 \
-		--memory=256 \
+		--memory=512 \
 		--timeout=60 \
 		--source=function/ \
 		--entry-point=main \
+		--no-allow-unauthenticated \
 		--project=$(ENV_GCP_PROJECT_ID_STG) \
 		--set-env-vars=ENV_FOR_DYNACONF=$(ENV_FOR_DYNACONF_STG),ENV_LOGGER=$(ENV_LOGGER_CLOUD),ENV_GCP_PROJECT_ID=$(ENV_GCP_PROJECT_ID_STG) \
 		--service-account=$(PROJECT_NAME)@$(ENV_GCP_PROJECT_ID_STG).iam.gserviceaccount.com
@@ -84,6 +86,48 @@ deploy_stg_env:
 		--region=asia-northeast1 \
 		--format=json \
 		| jq '.serviceConfig.environmentVariables'
+
+.PHONY: scheduler_prd
+scheduler_prd:
+	@if gcloud scheduler jobs describe $(PROJECT_NAME)-scheduler --project=$(ENV_GCP_PROJECT_ID) --location=asia-northeast1 > /dev/null 2>&1; then \
+		opt="update"; \
+	else \
+		opt="create"; \
+	fi; \
+	gcloud scheduler jobs $${opt} http $(PROJECT_NAME)-scheduler \
+		--schedule="5 0-11 25 * *" \
+		--uri="https://asia-northeast1-$(ENV_GCP_PROJECT_ID).cloudfunctions.net/$(PROJECT_NAME)" \
+		--http-method=GET \
+		--time-zone=Asia/Tokyo \
+		--location=asia-northeast1 \
+		--project=$(ENV_GCP_PROJECT_ID) \
+		--description="${PROJECT_NAME} scheduler" \
+		--oidc-service-account-email=$(PROJECT_NAME)@$(ENV_GCP_PROJECT_ID).iam.gserviceaccount.com \
+		--oidc-token-audience="https://asia-northeast1-$(ENV_GCP_PROJECT_ID).cloudfunctions.net/$(PROJECT_NAME)"
+
+.PHONY: scheduler_stg
+scheduler_stg:
+	@if gcloud scheduler jobs describe $(PROJECT_NAME)-scheduler --project=$(ENV_GCP_PROJECT_ID_STG) --location=asia-northeast1 > /dev/null 2>&1; then \
+		opt="update"; \
+	else \
+		opt="create"; \
+	fi; \
+	gcloud scheduler jobs $${opt} http $(PROJECT_NAME)-scheduler \
+		--schedule="5 0-11 25 * *" \
+		--uri="https://asia-northeast1-$(ENV_GCP_PROJECT_ID_STG).cloudfunctions.net/$(PROJECT_NAME)" \
+		--http-method=GET \
+		--time-zone=Asia/Tokyo \
+		--location=asia-northeast1 \
+		--project=$(ENV_GCP_PROJECT_ID_STG) \
+		--description="${PROJECT_NAME} scheduler" \
+		--oidc-service-account-email=$(PROJECT_NAME)@$(ENV_GCP_PROJECT_ID_STG).iam.gserviceaccount.com \
+		--oidc-token-audience="https://asia-northeast1-$(ENV_GCP_PROJECT_ID_STG).cloudfunctions.net/$(PROJECT_NAME)"
+
+.PHONY: func_logs
+func_logs:
+	@gcloud functions logs read $(PROJECT_NAME) \
+		--region=asia-northeast1 \
+		--project=$(ENV_GCP_PROJECT_ID_STG)
 
 .PHONY: logs
 logs:

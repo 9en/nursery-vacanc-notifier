@@ -3,7 +3,6 @@ import requests
 from bs4 import BeautifulSoup
 from dateutil import parser, tz
 from utils.dynaconf import get_config_value
-from utils.logger import logger
 
 
 def read_html_tables(html_source: bytes) -> pd.DataFrame:
@@ -43,7 +42,7 @@ def parse_update_time(timestamp_str: str) -> str:
   """
   timestamp = parser.parse(timestamp_str)
   timestamp = timestamp.astimezone(tz.tzutc())
-  return timestamp.strftime("%Y-%m-%d")
+  return timestamp.strftime("%Y-%m-%d %H:%M:%S")
 
 
 def extract_update_time(html_source: bytes) -> str:
@@ -68,7 +67,6 @@ def scrape() -> (pd.DataFrame, str):
       pd.DataFrame: DataFrame
       str: update time in the format of %Y-%m-%d %H:%M:%S
   """
-  logger.info("Scraping")
   for city in get_config_value("REQUEST_URL"):
     html_source = requests.get(get_config_value("REQUEST_URL")[city], timeout=10)
     update_time = extract_update_time(html_source.text)
