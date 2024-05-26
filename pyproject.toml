@@ -39,6 +39,7 @@ ignore = [
     "RUF001",  # Checks for ambiguous Unicode characters in strings.
     "RUF002",  # Checks for ambiguous Unicode characters in docstrings.
     "RUF003",  # Checks for ambiguous Unicode characters in comments.
+    "S608",    # Checks for strings that resemble SQL statements involved in some form string building operation.
     "SIM108",  # Check for if-else-blocks that can be replaced with a ternary operator.
 ]
 

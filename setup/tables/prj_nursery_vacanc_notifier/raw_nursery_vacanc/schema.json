@@ -1,0 +1,38 @@
+[
+  {
+    "name": "dt",
+    "type": "date",
+    "mode": "REQUIRED",
+    "description": "更新日"
+  },
+  {
+    "name": "city",
+    "type": "string",
+    "mode": "REQUIRED",
+    "description": "市区町村"
+  },
+  {
+    "name": "nursery_name",
+    "type": "string",
+    "mode": "REQUIRED",
+    "description": "保育所名称"
+  },
+  {
+    "name": "capacity",
+    "type": "integer",
+    "mode": "REQUIRED",
+    "description": "定員"
+  },
+  {
+    "name": "age",
+    "type": "string",
+    "mode": "REQUIRED",
+    "description": "受け入れ年齢"
+  },
+  {
+    "name": "vacancy",
+    "type": "string",
+    "mode": "REQUIRED",
+    "description": "空き状況"
+  }
+]

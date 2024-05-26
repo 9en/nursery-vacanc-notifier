@@ -1,5 +1,4 @@
 import requests
-
 from utils.dynaconf import get_config_value
 from utils.gcp import gcp_secretmanager
 
