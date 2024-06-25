@@ -48,6 +48,7 @@ def main(logger: Any, request: Any) -> Dict[str, Any]:
 
     if is_same_date(update_date) and bq_bytes == 0:
       logger.info("Load BigQuery Table")
+      bq.run_query("delete", update_date)
       bq.load(df)
 
       logger.debug("Post to LINE")
