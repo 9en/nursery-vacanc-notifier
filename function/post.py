@@ -30,6 +30,7 @@ def line_post(logger: Any, df: pd.DataFrame, update_date: str) -> None:
       update_date (str): Update time in the format of %Y-%m-%d
   """
   # 定員情報を追加
+  df["capacity"] = df["capacity"].astype("str")
   df["nursery_name"] = df["nursery_name"] + "(定員:" + df["capacity"] + ")"
 
   # 都市ごとに情報を送信
