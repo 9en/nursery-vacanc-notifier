@@ -95,7 +95,7 @@ scheduler_prd:
 		opt="create"; \
 	fi; \
 	gcloud scheduler jobs $${opt} http $(PROJECT_NAME)-scheduler \
-		--schedule="5 0-11 25 * *" \
+		--schedule=$(ENV_GCP_SCHEDULE) \
 		--uri="https://asia-northeast1-$(ENV_GCP_PROJECT_ID).cloudfunctions.net/$(PROJECT_NAME)" \
 		--http-method=GET \
 		--time-zone=Asia/Tokyo \
@@ -113,7 +113,7 @@ scheduler_stg:
 		opt="create"; \
 	fi; \
 	gcloud scheduler jobs $${opt} http $(PROJECT_NAME)-scheduler \
-		--schedule="5 0-11 25 * *" \
+		--schedule=$(ENV_GCP_SCHEDULE) \
 		--uri="https://asia-northeast1-$(ENV_GCP_PROJECT_ID_STG).cloudfunctions.net/$(PROJECT_NAME)" \
 		--http-method=GET \
 		--time-zone=Asia/Tokyo \
