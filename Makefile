@@ -1,6 +1,11 @@
 include .env
+include .env.secret
 PROJECT_NAME := $(shell basename $(CURDIR))
 
+
+.PHONY: set_gcp
+set_gcp:
+	@sh configure_gcp_projects.sh
 
 .PHONY: build
 build:

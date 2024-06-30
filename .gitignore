@@ -166,3 +166,4 @@ data
 *.dict
 nohup.out
 function/requirements.txt
+.env.secret
